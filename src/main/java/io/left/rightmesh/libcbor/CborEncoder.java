@@ -392,7 +392,7 @@ public class CborEncoder {
      */
     public CborEncoder cbor_encode_byte_string(Flowable<ByteBuffer> source) {
         cbor_start_byte_string(-1);
-        add(source.flatMap(buffer -> CBOR.encoder().cbor_encode_byte_string(buffer).observe()));
+        add(source.concatMap(buffer -> CBOR.encoder().cbor_encode_byte_string(buffer).observe(), 1));
         cbor_stop_byte_string();
         return this;
     }
