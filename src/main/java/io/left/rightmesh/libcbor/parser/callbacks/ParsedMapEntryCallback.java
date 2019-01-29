@@ -1,11 +1,11 @@
 package io.left.rightmesh.libcbor.parser.callbacks;
 
-import io.left.rightmesh.libcbor.ParserInCallbackApi;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.ParserInCallback;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 /**
  * @author Lucien Loiseau on 28/01/19.
  */
 public interface ParsedMapEntryCallback<T, U> {
-    void onMapEntryParsed(ParserInCallbackApi parser, T key, U value) throws RxParserException;
+    void onMapEntryParsed(ParserInCallback parser, T key, U value) throws RxParserException;
 }

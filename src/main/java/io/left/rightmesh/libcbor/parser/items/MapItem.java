@@ -3,7 +3,7 @@ package io.left.rightmesh.libcbor.parser.items;
 import java.util.LinkedList;
 import java.util.Map;
 
-import io.left.rightmesh.libcbor.CborParserApi;
+import io.left.rightmesh.libcbor.CborParser;
 
 import static io.left.rightmesh.libcbor.Constants.CborType.CborMapType;
 
@@ -28,7 +28,7 @@ public class MapItem extends DataItem implements ParseableItem {
     }
 
     @Override
-    public CborParserApi getItemParser() {
+    public CborParser getItemParser() {
         // todo
         return null;
     }

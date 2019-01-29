@@ -1,7 +1,7 @@
 package io.left.rightmesh.libcbor.parser.items;
 
 import io.left.rightmesh.libcbor.CBOR;
-import io.left.rightmesh.libcbor.CborParserApi;
+import io.left.rightmesh.libcbor.CborParser;
 
 import static io.left.rightmesh.libcbor.Constants.CborType.CborBooleanType;
 
@@ -22,7 +22,7 @@ public class BooleanItem extends DataItem implements ParseableItem {
     }
 
     @Override
-    public CborParserApi getItemParser() {
+    public CborParser getItemParser() {
         return CBOR.parser().cbor_parse_boolean(this::setItem);
     }
 

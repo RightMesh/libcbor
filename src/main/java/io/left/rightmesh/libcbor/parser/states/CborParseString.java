@@ -2,10 +2,10 @@ package io.left.rightmesh.libcbor.parser.states;
 
 import java.nio.ByteBuffer;
 
-import io.left.rightmesh.libcbor.parser.CborParser;
+import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.states.basic.BufferState;
 import io.left.rightmesh.libcbor.parser.states.basic.ParserState;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 import static io.left.rightmesh.libcbor.Constants.CborJumpTable.CborBreak;
 
@@ -69,7 +69,7 @@ public abstract class CborParseString extends ExtractTagItem {
     ParserState checkBreak = new ParserState() {
         @Override
         public ParserState onNext(ByteBuffer next) throws RxParserException {
-            byte b = CborParser.peek(next);
+            byte b = CborParserImpl.peek(next);
             if ((b & 0xff) == CborBreak) {
                 next.get();
                 return CborParseString.this.onSuccess();

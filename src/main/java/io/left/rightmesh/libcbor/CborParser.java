@@ -3,7 +3,7 @@ package io.left.rightmesh.libcbor;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
 
-import io.left.rightmesh.libcbor.parser.CborParser;
+import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.callbacks.ChunkCallback;
 import io.left.rightmesh.libcbor.parser.callbacks.ConditionCallback;
 import io.left.rightmesh.libcbor.parser.callbacks.ContainerIsCloseCallback;
@@ -21,12 +21,12 @@ import io.left.rightmesh.libcbor.parser.callbacks.ParsingDoneCallback;
 import io.left.rightmesh.libcbor.parser.items.DataItem;
 import io.left.rightmesh.libcbor.parser.items.ItemFactory;
 import io.left.rightmesh.libcbor.parser.items.ParseableItem;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 /**
  * @author Lucien Loiseau on 28/01/19.
  */
-public interface CborParserApi {
+public interface CborParser {
 
     enum ExpectedType {
         Integer, Float, ByteString, TextString, Array, Map, Tag, Simple
@@ -47,7 +47,7 @@ public interface CborParserApi {
      * @param object to be saved
      * @return this parser
      */
-    CborParserApi set(String key, Object object);
+    CborParser set(String key, Object object);
 
     /**
      * Returns a previously saved item.
@@ -64,7 +64,7 @@ public interface CborParserApi {
      * @param key to the object
      * @return this parser
      */
-    CborParserApi remove(String key);
+    CborParser remove(String key);
 
     /**
      * set an object in a register so it is accessible by any other callback.
@@ -74,7 +74,7 @@ public interface CborParserApi {
      * @param object to be saved
      * @return this parser
      */
-    CborParserApi setReg(int pos, Object object);
+    CborParser setReg(int pos, Object object);
 
     /**
      * Returns a previously saved item from the register.
@@ -110,7 +110,7 @@ public interface CborParserApi {
      *
      * @param parser sequence to add at the end.
      */
-    CborParserApi merge(CborParser parser);
+    CborParser merge(CborParserImpl parser);
 
     /**
      * Add a parsing sequence after the current
@@ -118,131 +118,131 @@ public interface CborParserApi {
      *
      * @param parser to add at the front of the sequence
      */
-    CborParserApi insert(CborParser parser);
+    CborParser insert(CborParserImpl parser);
 
-    CborParserApi do_for_each(String key, FilterCallback cb);
+    CborParser do_for_each(String key, FilterCallback cb);
 
-    CborParserApi undo_for_each(String key);
+    CborParser undo_for_each(String key);
 
-    CborParserApi undo_for_each(String key, ParsingDoneCallback cb);
+    CborParser undo_for_each(String key, ParsingDoneCallback cb);
 
-    CborParserApi do_here(ParsingDoneCallback cb);
+    CborParser do_here(ParsingDoneCallback cb);
 
-    CborParserApi do_insert_if(ConditionCallback ccb, CborParser parser);
+    CborParser do_insert_if(ConditionCallback ccb, CborParserImpl parser);
 
-    CborParserApi cbor_parse_generic(ParsedItemCallback<DataItem> cb);
+    CborParser cbor_parse_generic(ParsedItemCallback<DataItem> cb);
 
-    CborParserApi cbor_parse_generic(EnumSet<CborParser.ExpectedType> types, ParsedItemCallback<DataItem> cb);
+    CborParser cbor_parse_generic(EnumSet<CborParserImpl.ExpectedType> types, ParsedItemCallback<DataItem> cb);
 
-    CborParserApi cbor_or(CborParser p1, CborParser p2);
+    CborParser cbor_or(CborParserImpl p1, CborParserImpl p2);
 
-    <T extends ParseableItem> CborParser cbor_parse_custom_item(ItemFactory<T> factory, ParsedItemWithTagsCallback<T> cb);
+    <T extends ParseableItem> CborParserImpl cbor_parse_custom_item(ItemFactory<T> factory, ParsedItemWithTagsCallback<T> cb);
 
-    CborParserApi cbor_parse_boolean(ParsedBoolean cb);
+    CborParser cbor_parse_boolean(ParsedBoolean cb);
 
-    CborParserApi cbor_parse_break();
+    CborParser cbor_parse_break();
 
-    CborParserApi cbor_parse_break(ParsingDoneCallback cb);
+    CborParser cbor_parse_break(ParsingDoneCallback cb);
 
-    CborParserApi cbor_parse_undefined();
+    CborParser cbor_parse_undefined();
 
-    CborParserApi cbor_parse_undefined(ParsingDoneCallback cb);
+    CborParser cbor_parse_undefined(ParsingDoneCallback cb);
 
-    CborParserApi cbor_parse_null();
+    CborParser cbor_parse_null();
 
-    CborParserApi cbor_parse_null(ParsingDoneCallback cb);
+    CborParser cbor_parse_null(ParsingDoneCallback cb);
 
-    CborParserApi cbor_parse_simple_value(ParsedItemCallback cb);
+    CborParser cbor_parse_simple_value(ParsedItemCallback cb);
 
-    CborParser cbor_parse_int(ParsedIntWithTagsCallback cb);
+    CborParserImpl cbor_parse_int(ParsedIntWithTagsCallback cb);
 
-    CborParser cbor_parse_float(ParsedFloatWithTagsCallback cb);
+    CborParserImpl cbor_parse_float(ParsedFloatWithTagsCallback cb);
 
-    CborParserApi cbor_parse_byte_string(ChunkCallback<ByteBuffer> cb);
+    CborParser cbor_parse_byte_string(ChunkCallback<ByteBuffer> cb);
 
-    CborParserApi cbor_parse_byte_string(ContainerIsOpenCallback cb1, ChunkCallback<ByteBuffer> cb2);
+    CborParser cbor_parse_byte_string(ContainerIsOpenCallback cb1, ChunkCallback<ByteBuffer> cb2);
 
-    CborParserApi cbor_parse_byte_string(ContainerIsOpenCallback cb1,
-                                         ChunkCallback<ByteBuffer> cb2,
-                                         ContainerIsCloseCallback cb3);
+    CborParser cbor_parse_byte_string(ContainerIsOpenCallback cb1,
+                                      ChunkCallback<ByteBuffer> cb2,
+                                      ContainerIsCloseCallback cb3);
 
-    CborParserApi cbor_parse_byte_string_unsafe(ParsedItemWithTagsCallback<ByteBuffer> cb);
+    CborParser cbor_parse_byte_string_unsafe(ParsedItemWithTagsCallback<ByteBuffer> cb);
 
-    CborParserApi cbor_parse_text_string(ChunkCallback<String> cb);
+    CborParser cbor_parse_text_string(ChunkCallback<String> cb);
 
-    CborParserApi cbor_parse_text_string(ContainerIsOpenCallback cb1, ChunkCallback<String> cb2);
+    CborParser cbor_parse_text_string(ContainerIsOpenCallback cb1, ChunkCallback<String> cb2);
 
-    CborParserApi cbor_parse_text_string(ContainerIsOpenCallback cb1,
-                                         ChunkCallback<String> cb2,
-                                         ContainerIsCloseCallback cb3);
+    CborParser cbor_parse_text_string(ContainerIsOpenCallback cb1,
+                                      ChunkCallback<String> cb2,
+                                      ContainerIsCloseCallback cb3);
 
-    CborParserApi cbor_parse_text_string_full(ParsedItemCallback<String> cb);
+    CborParser cbor_parse_text_string_full(ParsedItemCallback<String> cb);
 
-    CborParserApi cbor_parse_text_string_full(ContainerIsOpenCallback cb1, ParsedItemCallback<String> cb2);
+    CborParser cbor_parse_text_string_full(ContainerIsOpenCallback cb1, ParsedItemCallback<String> cb2);
 
-    CborParser cbor_parse_text_string_unsafe(ParsedItemWithTagsCallback<String> cb);
+    CborParserImpl cbor_parse_text_string_unsafe(ParsedItemWithTagsCallback<String> cb);
 
-    CborParserApi cbor_parse_tag(ParsedItemCallback<Long> cb);
+    CborParser cbor_parse_tag(ParsedItemCallback<Long> cb);
 
-    <T extends ParseableItem> CborParserApi cbor_parse_linear_array(
+    <T extends ParseableItem> CborParser cbor_parse_linear_array(
             ItemFactory<T> factory,
             ContainerIsCloseWithCollectionCallback<T> cb);
 
-    <T extends ParseableItem> CborParserApi cbor_parse_linear_array(
+    <T extends ParseableItem> CborParser cbor_parse_linear_array(
             ItemFactory<T> factory,
             ContainerIsOpenCallback cb1,
             ParsedItemWithTagsCallback<T> cb2,
             ContainerIsCloseWithCollectionCallback<T> cb3);
 
-    <T extends ParseableItem> CborParserApi cbor_parse_linear_array_stream(
+    <T extends ParseableItem> CborParser cbor_parse_linear_array_stream(
             ItemFactory<T> factory,
             ParsedItemWithTagsCallback<T> cb);
 
-    <T extends ParseableItem> CborParserApi cbor_parse_linear_array_stream(
+    <T extends ParseableItem> CborParser cbor_parse_linear_array_stream(
             ItemFactory<T> factory,
             ContainerIsOpenCallback cb1,
             ParsedItemWithTagsCallback<T> cb2,
             ContainerIsCloseCallback cb3);
 
-    <T extends ParseableItem, U extends ParseableItem> CborParserApi cbor_parse_linear_map(
+    <T extends ParseableItem, U extends ParseableItem> CborParser cbor_parse_linear_map(
             ItemFactory<T> keyFactory,
             ItemFactory<U> valueFactory,
             ContainerIsCloseWithMapCallback<T, U> cb);
 
-    <T extends ParseableItem, U extends ParseableItem> CborParserApi cbor_parse_linear_map(
+    <T extends ParseableItem, U extends ParseableItem> CborParser cbor_parse_linear_map(
             ItemFactory<T> keyFactory,
             ItemFactory<U> valueFactory,
             ContainerIsOpenCallback cb1,
             ParsedMapEntryCallback<T, U> cb2,
             ContainerIsCloseWithMapCallback<T, U> cb3);
 
-    CborParserApi cbor_open_map(ContainerIsOpenCallback cb);
+    CborParser cbor_open_map(ContainerIsOpenCallback cb);
 
-    CborParserApi cbor_close_map();
+    CborParser cbor_close_map();
 
-    CborParserApi cbor_close_map(ContainerIsCloseCallback cb);
+    CborParser cbor_close_map(ContainerIsCloseCallback cb);
 
-    CborParserApi cbor_open_array(ContainerIsOpenCallback cb);
+    CborParser cbor_open_array(ContainerIsOpenCallback cb);
 
-    CborParserApi cbor_open_array(int expectedSize);
+    CborParser cbor_open_array(int expectedSize);
 
-    CborParserApi cbor_open_container(ContainerIsOpenCallback cb,
-                                      int majorType);
+    CborParser cbor_open_container(ContainerIsOpenCallback cb,
+                                   int majorType);
 
-    CborParserApi cbor_open_container_expected_size(int expectedSize, int majorType);
+    CborParser cbor_open_container_expected_size(int expectedSize, int majorType);
 
-    <T extends ParseableItem> CborParserApi cbor_parse_array_items(
+    <T extends ParseableItem> CborParser cbor_parse_array_items(
             ItemFactory<T> factory,
             ParsedItemWithTagsCallback<T> cb);
 
-    <T extends ParseableItem> CborParserApi cbor_parse_array_items(
+    <T extends ParseableItem> CborParser cbor_parse_array_items(
             ItemFactory<T> factory,
             ParsedItemWithTagsCallback<T> cb1,
             ContainerIsCloseCallback cb2);
 
-    CborParserApi cbor_close_array();
+    CborParser cbor_close_array();
 
-    CborParserApi cbor_close_array(ContainerIsCloseCallback cb);
+    CborParser cbor_close_array(ContainerIsCloseCallback cb);
 
-    CborParserApi cbor_close_container(ContainerIsCloseCallback cb);
+    CborParser cbor_close_container(ContainerIsCloseCallback cb);
 }

@@ -3,7 +3,7 @@ package io.left.rightmesh.libcbor.parser.items;
 import java.util.LinkedList;
 
 import io.left.rightmesh.libcbor.CBOR;
-import io.left.rightmesh.libcbor.CborParserApi;
+import io.left.rightmesh.libcbor.CborParser;
 
 import static io.left.rightmesh.libcbor.Constants.CborType.CborSimpleType;
 
@@ -29,7 +29,7 @@ public class SimpleValueItem extends DataItem implements ParseableItem {
     }
 
     @Override
-    public CborParserApi getItemParser() {
+    public CborParser getItemParser() {
         return CBOR.parser().cbor_parse_simple_value(this::setItem);
     }
 

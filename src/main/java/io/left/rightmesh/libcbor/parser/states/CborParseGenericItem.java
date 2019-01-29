@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import io.left.rightmesh.libcbor.parser.CborParser;
+import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.items.ArrayItem;
 import io.left.rightmesh.libcbor.parser.items.ByteStringItem;
 import io.left.rightmesh.libcbor.parser.items.DataItem;
@@ -19,7 +19,7 @@ import io.left.rightmesh.libcbor.parser.items.SimpleValueItem;
 import io.left.rightmesh.libcbor.parser.items.TagItem;
 import io.left.rightmesh.libcbor.parser.items.TextStringItem;
 import io.left.rightmesh.libcbor.parser.states.basic.ParserState;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 import static io.left.rightmesh.libcbor.Constants.CborInternals.SmallValueMask;
 import static io.left.rightmesh.libcbor.Constants.CborJumpTable.CborBreak;
@@ -56,16 +56,16 @@ public abstract class CborParseGenericItem extends ExtractTagItem {
         tags = new LinkedList<>();
     }
 
-    public CborParseGenericItem(EnumSet<CborParser.ExpectedType> types) {
+    public CborParseGenericItem(EnumSet<CborParserImpl.ExpectedType> types) {
         this();
-        filter_int = types.contains(CborParser.ExpectedType.Integer);
-        filter_float = types.contains(CborParser.ExpectedType.Float);
-        filter_byte_string = types.contains(CborParser.ExpectedType.ByteString);
-        filter_text_string = types.contains(CborParser.ExpectedType.TextString);
-        filter_array = types.contains(CborParser.ExpectedType.Array);
-        filter_map = types.contains(CborParser.ExpectedType.Map);
-        filter_tag = types.contains(CborParser.ExpectedType.Tag);
-        filter_simple = types.contains(CborParser.ExpectedType.Simple);
+        filter_int = types.contains(CborParserImpl.ExpectedType.Integer);
+        filter_float = types.contains(CborParserImpl.ExpectedType.Float);
+        filter_byte_string = types.contains(CborParserImpl.ExpectedType.ByteString);
+        filter_text_string = types.contains(CborParserImpl.ExpectedType.TextString);
+        filter_array = types.contains(CborParserImpl.ExpectedType.Array);
+        filter_map = types.contains(CborParserImpl.ExpectedType.Map);
+        filter_tag = types.contains(CborParserImpl.ExpectedType.Tag);
+        filter_simple = types.contains(CborParserImpl.ExpectedType.Simple);
     }
 
     @Override
@@ -206,7 +206,7 @@ public abstract class CborParseGenericItem extends ExtractTagItem {
         ParserState checkBreak = new ParserState() {
             @Override
             public ParserState onNext(ByteBuffer next) throws RxParserException {
-                byte b = CborParser.peek(next);
+                byte b = CborParserImpl.peek(next);
                 if ((b & 0xff) == CborBreak) {
                     next.get();
                     return CborParseGenericItem.this.onSuccess(new ArrayItem(tags, array));
@@ -265,7 +265,7 @@ public abstract class CborParseGenericItem extends ExtractTagItem {
         ParserState checkBreak = new ParserState() {
             @Override
             public ParserState onNext(ByteBuffer next) throws RxParserException {
-                byte b = CborParser.peek(next);
+                byte b = CborParserImpl.peek(next);
                 if ((b & 0xff) == CborBreak) {
                     next.get();
                     return CborParseGenericItem.this.onSuccess(new MapItem(tags, map));

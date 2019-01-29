@@ -3,12 +3,12 @@ package io.left.rightmesh.libcbor.parser.states;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 
-import io.left.rightmesh.libcbor.CborParserApi;
-import io.left.rightmesh.libcbor.parser.CborParser;
+import io.left.rightmesh.libcbor.CborParser;
+import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.items.ItemFactory;
 import io.left.rightmesh.libcbor.parser.items.ParseableItem;
 import io.left.rightmesh.libcbor.parser.states.basic.ParserState;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 import static io.left.rightmesh.libcbor.Constants.CborJumpTable.CborBreak;
 import static io.left.rightmesh.libcbor.Constants.CborMajorTypes.ArrayType;
@@ -44,7 +44,7 @@ public abstract class CborParseLinearArray<T extends ParseableItem> extends Extr
     ParserState checkBreak = new ParserState() {
         @Override
         public ParserState onNext(ByteBuffer next) throws RxParserException {
-            byte b = CborParser.peek(next);
+            byte b = CborParserImpl.peek(next);
             if ((b & 0xff) == CborBreak) {
                 next.get();
                 return onArrayIsClose();
@@ -57,7 +57,7 @@ public abstract class CborParseLinearArray<T extends ParseableItem> extends Extr
 
     ParserState extractOneItem = new ExtractTagItem(true) {
         T item;
-        CborParserApi parser;
+        CborParser parser;
         LinkedList<Long> tags;
 
         @Override

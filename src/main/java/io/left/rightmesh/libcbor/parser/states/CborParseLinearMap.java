@@ -2,12 +2,12 @@ package io.left.rightmesh.libcbor.parser.states;
 
 import java.nio.ByteBuffer;
 
-import io.left.rightmesh.libcbor.CborParserApi;
-import io.left.rightmesh.libcbor.parser.CborParser;
+import io.left.rightmesh.libcbor.CborParser;
+import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.items.ItemFactory;
 import io.left.rightmesh.libcbor.parser.items.ParseableItem;
 import io.left.rightmesh.libcbor.parser.states.basic.ParserState;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 import static io.left.rightmesh.libcbor.Constants.CborJumpTable.CborBreak;
 import static io.left.rightmesh.libcbor.Constants.CborMajorTypes.MapType;
@@ -47,7 +47,7 @@ public abstract class CborParseLinearMap<T extends ParseableItem, U extends Pars
     ParserState checkBreak = new ParserState() {
         @Override
         public ParserState onNext(ByteBuffer next) throws RxParserException {
-            byte b = CborParser.peek(next);
+            byte b = CborParserImpl.peek(next);
             if ((b & 0xff) == CborBreak) {
                 next.get();
                 return onMapIsClose();
@@ -58,7 +58,7 @@ public abstract class CborParseLinearMap<T extends ParseableItem, U extends Pars
     };
 
     ParserState extractKey = new ParserState() {
-        CborParserApi parser;
+        CborParser parser;
 
         @Override
         public void onEnter() {
@@ -77,7 +77,7 @@ public abstract class CborParseLinearMap<T extends ParseableItem, U extends Pars
 
     ParserState extractValue = new ParserState() {
         U value;
-        CborParserApi parser;
+        CborParser parser;
 
         @Override
         public void onEnter() {

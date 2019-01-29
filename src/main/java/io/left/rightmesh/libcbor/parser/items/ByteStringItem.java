@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 
 import io.left.rightmesh.libcbor.CBOR;
-import io.left.rightmesh.libcbor.CborParserApi;
+import io.left.rightmesh.libcbor.CborParser;
 
 import static io.left.rightmesh.libcbor.Constants.CborType.CborByteStringType;
 
@@ -29,7 +29,7 @@ public class ByteStringItem extends DataItem implements ParseableItem {
     }
 
     @Override
-    public CborParserApi getItemParser() {
+    public CborParser getItemParser() {
         return CBOR.parser().cbor_parse_byte_string_unsafe(this::setTaggedItem);
     }
 

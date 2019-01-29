@@ -2,6 +2,8 @@ package io.left.rightmesh.libcbor.parser.states.basic;
 
 import java.nio.ByteBuffer;
 
+import io.left.rightmesh.libcbor.parser.RxParserException;
+
 /**
  * ShortState deserialize a single Short value.
  *

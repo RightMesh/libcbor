@@ -5,16 +5,16 @@ import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Map;
 
-import io.left.rightmesh.libcbor.encoder.CborEncoder;
+import io.left.rightmesh.libcbor.encoder.CborEncoderImpl;
 import io.left.rightmesh.libcbor.encoder.CborEncodingUnknown;
 import io.reactivex.Flowable;
 
 /**
  * @author Lucien Loiseau on 28/01/19.
  */
-public interface CborEncoderApi {
+public interface CborEncoder {
 
-    CborEncoderApi merge(CborEncoder o);
+    CborEncoder merge(CborEncoderImpl o);
 
     Flowable<ByteBuffer> observe();
 
@@ -44,13 +44,13 @@ public interface CborEncoderApi {
      * @throws BufferOverflowException if the buffer is full
      * @throws CborEncodingUnknown     if object is not accepted type
      */
-    CborEncoderApi cbor_encode_object(Object o) throws CborEncodingUnknown;
+    CborEncoder cbor_encode_object(Object o) throws CborEncodingUnknown;
 
-    CborEncoderApi cbor_encode_boolean(boolean b);
+    CborEncoder cbor_encode_boolean(boolean b);
 
-    CborEncoderApi cbor_encode_null();
+    CborEncoder cbor_encode_null();
 
-    CborEncoderApi cbor_encode_undefined();
+    CborEncoder cbor_encode_undefined();
 
     /**
      * cbor_encode_collection will try to encode the collection given as a paremeter. The item
@@ -61,7 +61,7 @@ public interface CborEncoderApi {
      * @throws BufferOverflowException if the buffer is full
      * @throws CborEncodingUnknown     if object is not accepted type
      */
-    CborEncoderApi cbor_encode_collection(Collection c) throws CborEncodingUnknown;
+    CborEncoder cbor_encode_collection(Collection c) throws CborEncodingUnknown;
 
     /**
      * cbor_encode_map will try to encode the map given as a paremeter. The keys and items
@@ -72,7 +72,7 @@ public interface CborEncoderApi {
      * @throws BufferOverflowException if the buffer is full
      * @throws CborEncodingUnknown     if object is not accepted type
      */
-    CborEncoderApi cbor_encode_map(Map m) throws CborEncodingUnknown;
+    CborEncoder cbor_encode_map(Map m) throws CborEncodingUnknown;
 
     /**
      * Starts an indefinite array. This encoder makes no check if a break ever appear later
@@ -80,7 +80,7 @@ public interface CborEncoderApi {
      *
      * @return this encoder
      */
-    CborEncoderApi cbor_start_indefinite_array();
+    CborEncoder cbor_start_indefinite_array();
 
     /**
      * Starts an array of length given. if length is negative, the array is assumed to be of size
@@ -90,14 +90,14 @@ public interface CborEncoderApi {
      * @param length of the array
      * @return this encoder
      */
-    CborEncoderApi cbor_start_array(long length);
+    CborEncoder cbor_start_array(long length);
 
     /**
      * Close an opened array. This encoder makes no check wether a container was opened earlier.
      *
      * @return this encoder
      */
-    CborEncoderApi cbor_stop_array();
+    CborEncoder cbor_stop_array();
 
     /**
      * Starts a map of length given. if length is negative, the map is assumed to be of size
@@ -107,14 +107,14 @@ public interface CborEncoderApi {
      * @param length of the map
      * @return this encoder
      */
-    CborEncoderApi cbor_start_map(long length);
+    CborEncoder cbor_start_map(long length);
 
     /**
      * Close an opened map. This encoder makes no check wether a container was opened earlier.
      *
      * @return this encoder
      */
-    CborEncoderApi cbor_stop_map();
+    CborEncoder cbor_stop_map();
 
     /**
      * Starts a byte string of length given. if length is negative, the string is assumed to be of
@@ -125,7 +125,7 @@ public interface CborEncoderApi {
      * @param length of the string
      * @return this encoder
      */
-    CborEncoderApi cbor_start_byte_string(long length);
+    CborEncoder cbor_start_byte_string(long length);
 
     /**
      * Add a fixed length byte string.
@@ -133,7 +133,7 @@ public interface CborEncoderApi {
      * @param chunk to add
      * @return this encoder
      */
-    CborEncoderApi cbor_put_byte_string_chunk(byte[] chunk);
+    CborEncoder cbor_put_byte_string_chunk(byte[] chunk);
 
     /**
      * Close an opened byte string. This encoder makes no check wether a container was opened
@@ -141,7 +141,7 @@ public interface CborEncoderApi {
      *
      * @return this encoder
      */
-    CborEncoderApi cbor_stop_byte_string();
+    CborEncoder cbor_stop_byte_string();
 
     /**
      * Starts a text string of length given. if length is negative, the string is assumed to be of
@@ -152,7 +152,7 @@ public interface CborEncoderApi {
      * @param length of the string
      * @return this encoder
      */
-    CborEncoderApi cbor_start_text_string(long length);
+    CborEncoder cbor_start_text_string(long length);
 
     /**
      * Add a fixed length text string.
@@ -160,7 +160,7 @@ public interface CborEncoderApi {
      * @param chunk to add
      * @return this encoder
      */
-    CborEncoderApi cbor_put_text_string_chunk(String chunk);
+    CborEncoder cbor_put_text_string_chunk(String chunk);
 
     /**
      * Close an opened text string. This encoder makes no check wether a container was opened
@@ -168,7 +168,7 @@ public interface CborEncoderApi {
      *
      * @return this encoder
      */
-    CborEncoderApi cbor_stop_text_string();
+    CborEncoder cbor_stop_text_string();
 
     /**
      * Add a fixed length byte string.
@@ -176,7 +176,7 @@ public interface CborEncoderApi {
      * @param array to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_byte_string(byte[] array);
+    CborEncoder cbor_encode_byte_string(byte[] array);
 
     /**
      * Add a fixed length byte string.
@@ -184,7 +184,7 @@ public interface CborEncoderApi {
      * @param buf to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_byte_string(ByteBuffer buf);
+    CborEncoder cbor_encode_byte_string(ByteBuffer buf);
 
     /**
      * Add a byte string from a Flowable and create an indefinite size cbor byte string.
@@ -192,7 +192,7 @@ public interface CborEncoderApi {
      * @param source      to encode
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_byte_string(Flowable<ByteBuffer> source);
+    CborEncoder cbor_encode_byte_string(Flowable<ByteBuffer> source);
 
     /**
      * Add a byte string from a Flowable. If computeSize is set to true, it will create a
@@ -203,7 +203,7 @@ public interface CborEncoderApi {
      * @param computeSize set whether or not to do a first pass to compute total length
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_byte_string(Flowable<ByteBuffer> source, boolean computeSize);
+    CborEncoder cbor_encode_byte_string(Flowable<ByteBuffer> source, boolean computeSize);
 
     /**
      * Add a byte string from a Flowable with a definite size. It will throw an exception if
@@ -213,7 +213,7 @@ public interface CborEncoderApi {
      * @param source to encode
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_byte_string(long size, Flowable<ByteBuffer> source);
+    CborEncoder cbor_encode_byte_string(long size, Flowable<ByteBuffer> source);
 
     /**
      * Add a fixed length text string. This encoder makes no check that the str supplied is
@@ -222,7 +222,7 @@ public interface CborEncoderApi {
      * @param str to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_text_string(String str);
+    CborEncoder cbor_encode_text_string(String str);
 
     /**
      * add a tag to the CBOR stream.
@@ -230,7 +230,7 @@ public interface CborEncoderApi {
      * @param tag to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_tag(long tag);
+    CborEncoder cbor_encode_tag(long tag);
 
     /**
      * encode a double floating point number.
@@ -238,7 +238,7 @@ public interface CborEncoderApi {
      * @param value to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_double(double value);
+    CborEncoder cbor_encode_double(double value);
 
     /**
      * encode a single floating point number.
@@ -246,7 +246,7 @@ public interface CborEncoderApi {
      * @param value to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_float(float value);
+    CborEncoder cbor_encode_float(float value);
 
     /**
      * encode a half floating point number.
@@ -254,7 +254,7 @@ public interface CborEncoderApi {
      * @param value to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_half_float(float value);
+    CborEncoder cbor_encode_half_float(float value);
 
     /**
      * add a simple value {@see Constants.CborSimpleValues}.
@@ -262,7 +262,7 @@ public interface CborEncoderApi {
      * @param value to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_simple_value(byte value);
+    CborEncoder cbor_encode_simple_value(byte value);
 
     /**
      * encode a positive or negative byte/short/integer/long number.
@@ -270,7 +270,7 @@ public interface CborEncoderApi {
      * @param value to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_int(long value);
+    CborEncoder cbor_encode_int(long value);
 
     /**
      * encode an unsigned positive byte/short/integer/long number.
@@ -278,7 +278,7 @@ public interface CborEncoderApi {
      * @param ui to add
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_uint(long ui);
+    CborEncoder cbor_encode_uint(long ui);
 
     /**
      * encode a negative byte/short/integer/long number.
@@ -286,5 +286,5 @@ public interface CborEncoderApi {
      * @param absolute_value to add, value must be absolute
      * @return this encoder
      */
-    CborEncoderApi cbor_encode_negative_uint(long absolute_value);
+    CborEncoder cbor_encode_negative_uint(long absolute_value);
 }

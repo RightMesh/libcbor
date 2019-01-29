@@ -2,9 +2,9 @@ package io.left.rightmesh.libcbor.parser.states;
 
 import java.nio.ByteBuffer;
 
-import io.left.rightmesh.libcbor.parser.CborParser;
+import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.states.basic.ParserState;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 import static io.left.rightmesh.libcbor.Constants.CborInternals.MajorTypeMask;
 import static io.left.rightmesh.libcbor.Constants.CborInternals.MajorTypeShift;
@@ -16,7 +16,7 @@ import static io.left.rightmesh.libcbor.Constants.CborMajorTypes.TagType;
 public abstract class CborParseTag extends ParserState {
     @Override
     public ParserState onNext(ByteBuffer next) throws RxParserException {
-        byte b = CborParser.peek(next);
+        byte b = CborParserImpl.peek(next);
         int mt = (((b & MajorTypeMask) & 0xff) >>> MajorTypeShift);
         if (mt == TagType) {
             return extractInteger;

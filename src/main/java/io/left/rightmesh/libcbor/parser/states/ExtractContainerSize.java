@@ -1,7 +1,7 @@
 package io.left.rightmesh.libcbor.parser.states;
 
 import io.left.rightmesh.libcbor.parser.states.basic.ParserState;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 /**
  * @author Lucien Loiseau on 28/01/19.

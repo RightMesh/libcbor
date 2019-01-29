@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import io.left.rightmesh.libcbor.parser.states.basic.IntegerState;
 import io.left.rightmesh.libcbor.parser.states.basic.LongState;
 import io.left.rightmesh.libcbor.parser.states.basic.ParserState;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 import io.left.rightmesh.libcbor.parser.states.basic.ShortState;
 
 import static io.left.rightmesh.libcbor.Constants.CborJumpTable.CborDoublePrecisionFloat;

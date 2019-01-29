@@ -1,21 +1,21 @@
 package io.left.rightmesh.libcbor;
 
-import io.left.rightmesh.libcbor.parser.CborParser;
+import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.callbacks.FilterCallback;
 
 /**
  * @author Lucien Loiseau on 28/01/19.
  */
-public interface ParserInCallbackApi {
+public interface ParserInCallback {
     /**
      * Add a filter for the actual parser (runner) that will run for every parsed buffer
      * until undo_for_each is called.
      *
      * @param key the key for this filter
      * @param cb  te filter
-     * @return this ParserInCallback object
+     * @return this ParserInCallbackImpl object
      */
-    ParserInCallbackApi do_for_each_now(String key, FilterCallback cb);
+    ParserInCallback do_for_each_now(String key, FilterCallback cb);
 
     /**
      * Remove a filter from this actual parser (runner).
@@ -23,7 +23,7 @@ public interface ParserInCallbackApi {
      * @param key
      * @return this parser
      */
-    ParserInCallbackApi undo_for_each_now(String key);
+    ParserInCallback undo_for_each_now(String key);
 
     /**
      * Add a parsing sequence after the current
@@ -32,7 +32,7 @@ public interface ParserInCallbackApi {
      * @param parser to add at the front of the sequence
      * @return this parser
      */
-    ParserInCallbackApi insert_now(CborParser parser);
+    ParserInCallback insert_now(CborParserImpl parser);
 
     /**
      * set an object in a map so it is accessible by any other callback.
@@ -42,7 +42,7 @@ public interface ParserInCallbackApi {
      * @param object to be saved
      * @return this parser
      */
-    ParserInCallbackApi set(String key, Object object);
+    ParserInCallback set(String key, Object object);
 
     /**
      * Returns a previously saved item from the map.
@@ -59,7 +59,7 @@ public interface ParserInCallbackApi {
      * @param key
      * @return this parser
      */
-    ParserInCallbackApi remove(String key);
+    ParserInCallback remove(String key);
 
     /**
      * set an object in a register so it is accessible by any other callback.
@@ -67,9 +67,9 @@ public interface ParserInCallbackApi {
      *
      * @param pos    position of the object
      * @param object to be saved
-     * @return ParserInCallback
+     * @return ParserInCallbackImpl
      */
-    ParserInCallbackApi setReg(int pos, Object object);
+    ParserInCallback setReg(int pos, Object object);
 
     /**
      * Returns a previously saved item from the register.

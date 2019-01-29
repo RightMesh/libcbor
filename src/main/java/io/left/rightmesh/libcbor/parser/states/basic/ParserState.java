@@ -2,6 +2,8 @@ package io.left.rightmesh.libcbor.parser.states.basic;
 
 import java.nio.ByteBuffer;
 
+import io.left.rightmesh.libcbor.parser.RxParserException;
+
 /**
  * Object Oriented State Pattern. Each state must implement the onNext(Buffer) method to
  * process a newly arrived buffer. Child can optionally implements onEnter and onExit that

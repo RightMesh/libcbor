@@ -2,9 +2,9 @@ package io.left.rightmesh.libcbor.parser.states;
 
 import java.nio.ByteBuffer;
 
-import io.left.rightmesh.libcbor.parser.CborParser;
+import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.states.basic.ParserState;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 /**
  * @author Lucien Loiseau on 28/01/19.
@@ -12,14 +12,14 @@ import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
 public abstract class CborOr extends ParserState {
 
     ByteBuffer[] buf;
-    CborParser[] p;
+    CborParserImpl[] p;
     int[] status; // 0 = can continue, 1 = failed, 2 = success
     int nb_0 = 0;
     int nb_1 = 0;
     int nb_2 = 0;
     int winner;
 
-    public CborOr(CborParser[] parsers) {
+    public CborOr(CborParserImpl[] parsers) {
         buf = new ByteBuffer[parsers.length];
         status = new int[parsers.length];
         for (int i = 0; i < parsers.length; i++) {
@@ -81,5 +81,5 @@ public abstract class CborOr extends ParserState {
         return this;
     }
 
-    public abstract ParserState onSuccess(CborParser p);
+    public abstract ParserState onSuccess(CborParserImpl p);
 }

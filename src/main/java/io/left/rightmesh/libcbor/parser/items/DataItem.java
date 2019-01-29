@@ -2,7 +2,7 @@ package io.left.rightmesh.libcbor.parser.items;
 
 import java.util.LinkedList;
 
-import io.left.rightmesh.libcbor.ParserInCallbackApi;
+import io.left.rightmesh.libcbor.ParserInCallback;
 
 /**
  * A decoded Cbor data item.
@@ -31,11 +31,11 @@ public class DataItem {
         this.tags = tags;
     }
 
-    void setItem(ParserInCallbackApi parser, Object item) {
+    void setItem(ParserInCallback parser, Object item) {
         this.item = item;
     }
 
-    void setTaggedItem(ParserInCallbackApi parser, LinkedList<Long> tags, Object item) {
+    void setTaggedItem(ParserInCallback parser, LinkedList<Long> tags, Object item) {
         addTags(tags);
         setItem(null, item);
     }

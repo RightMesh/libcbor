@@ -20,11 +20,11 @@ import static org.junit.Assert.fail;
  * @author Lucien Loiseau on 14/09/18.
  */
 public class CborEncoderTest {
-    CborEncoderApi enc = CBOR.encoder();
+    CborEncoder enc = CBOR.encoder();
 
     @Test
     public void encodeAppendixA_PositiveInteger() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor positive integer");
+        System.out.println("[+] CborEncoder: testing encoding cbor positive integer");
 
         /* test positive integer */
         enc.cbor_encode_int(0);
@@ -60,7 +60,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_NegativeInteger() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor negative integer");
+        System.out.println("[+] CborEncoder: testing encoding cbor negative integer");
 
         /* test negative integer */
         enc.cbor_encode_int(-1);
@@ -78,7 +78,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_HalfFloat() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor half floating point precision number");
+        System.out.println("[+] CborEncoder: testing encoding cbor half floating point precision number");
 
         /* test float (half, single and double) */
         enc.cbor_encode_half_float(0.0f);
@@ -118,7 +118,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_Float() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor single floating point precision number");
+        System.out.println("[+] CborEncoder: testing encoding cbor single floating point precision number");
 
         enc.cbor_encode_float(100000.0f);
         assertEquals("0xfa47c35000", getEncodedString());
@@ -140,7 +140,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_Double() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor double floating point precision number");
+        System.out.println("[+] CborEncoder: testing encoding cbor double floating point precision number");
 
         enc.cbor_encode_double(1.1d);
         assertEquals("0xfb3ff199999999999a", getEncodedString());
@@ -162,7 +162,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_SimpleValues() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor simple value");
+        System.out.println("[+] CborEncoder: testing encoding cbor simple value");
 
         enc.cbor_encode_boolean(false);
         assertEquals("0xf4", getEncodedString());
@@ -188,7 +188,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_Byte_Text_Strings() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor definite byte and text strings");
+        System.out.println("[+] CborEncoder: testing encoding cbor definite byte and text strings");
 
         byte[] a3 = {};
         enc.cbor_encode_byte_string(a3);
@@ -222,7 +222,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_Byte_Text_Strings_Indefinite() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor indefinite byte and text strings");
+        System.out.println("[+] CborEncoder: testing encoding cbor indefinite byte and text strings");
 
         byte[] a4 = {0x01, 0x02};
         byte[] a5 = {0x03, 0x04, 0x05};
@@ -241,7 +241,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_Byte_Text_Strings_Definite() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor definite size byte strings");
+        System.out.println("[+] CborEncoder: testing encoding cbor definite size byte strings");
 
         byte[] a4 = {0x01, 0x02};
         byte[] a5 = {0x03, 0x04, 0x05};
@@ -261,7 +261,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_Tags() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor tags");
+        System.out.println("[+] CborEncoder: testing encoding cbor tags");
 
         /* test tag */
         enc.cbor_encode_tag(0)
@@ -293,7 +293,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_Array_And_Hashes_Definite() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor definite array and hashes");
+        System.out.println("[+] CborEncoder: testing encoding cbor definite array and hashes");
 
         enc.cbor_start_array(0);
         assertEquals("0x80", getEncodedString());
@@ -462,7 +462,7 @@ public class CborEncoderTest {
 
     @Test
     public void encodeAppendixA_Array_And_Hashes_Indefinite() {
-        System.out.println("[+] CborEncoderApi: testing encoding cbor indefinite array and hashes");
+        System.out.println("[+] CborEncoder: testing encoding cbor indefinite array and hashes");
 
         enc.cbor_start_array(-1)
                 .cbor_stop_array();
@@ -573,7 +573,7 @@ public class CborEncoderTest {
     }
     */
 
-    public CborEncoderApi encodePeer(String peer) {
+    public CborEncoder encodePeer(String peer) {
         return CBOR.encoder()
                 .cbor_start_array(1)
                 .cbor_encode_text_string(peer);

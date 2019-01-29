@@ -2,11 +2,11 @@ package io.left.rightmesh.libcbor.parser.states;
 
 import java.nio.ByteBuffer;
 
-import io.left.rightmesh.libcbor.CborParserApi;
+import io.left.rightmesh.libcbor.CborParser;
 import io.left.rightmesh.libcbor.parser.items.ItemFactory;
 import io.left.rightmesh.libcbor.parser.items.ParseableItem;
 import io.left.rightmesh.libcbor.parser.states.basic.ParserState;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 
 /**
  * @author Lucien Loiseau on 28/01/19.
@@ -26,7 +26,7 @@ public abstract class CborParseCustomItem<T extends ParseableItem> extends Extra
 
     ParserState extractCustomItem = new ParserState() {
         T item;
-        CborParserApi itemParser;
+        CborParser itemParser;
 
         @Override
         public void onEnter() throws RxParserException {

@@ -35,12 +35,12 @@ import java.util.Collection;
 import java.util.Map;
 
 import io.left.rightmesh.libcbor.CBOR;
-import io.left.rightmesh.libcbor.CborEncoderApi;
+import io.left.rightmesh.libcbor.CborEncoder;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.subscribers.DisposableSubscriber;
 
-public class CborEncoder implements CborEncoderApi {
+public class CborEncoderImpl implements CborEncoder {
 
     private class Subscriber extends DisposableSubscriber<ByteBuffer> {
         private ByteBuffer upstream_current;
@@ -96,12 +96,12 @@ public class CborEncoder implements CborEncoderApi {
 
     private Flowable<ByteBuffer> flow;
 
-    public CborEncoder() {
+    public CborEncoderImpl() {
         flow = Flowable.empty();
     }
 
     @Override
-    public CborEncoderApi merge(CborEncoder o) {
+    public CborEncoder merge(CborEncoderImpl o) {
         flow = flow.concatWith(o.flow);
         return this;
     }
@@ -131,7 +131,7 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_object(Object o) throws CborEncodingUnknown {
+    public CborEncoder cbor_encode_object(Object o) throws CborEncodingUnknown {
         if (o instanceof Double) {
             cbor_encode_double(((Double) o));
         } else if (o instanceof Float) {
@@ -164,22 +164,22 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_boolean(boolean b) {
+    public CborEncoder cbor_encode_boolean(boolean b) {
         return encode_number((byte) (CborSimpleType), b ? TrueValue : FalseValue);
     }
 
     @Override
-    public CborEncoderApi cbor_encode_null() {
+    public CborEncoder cbor_encode_null() {
         return encode_number((byte) (CborSimpleType), NullValue);
     }
 
     @Override
-    public CborEncoderApi cbor_encode_undefined() {
+    public CborEncoder cbor_encode_undefined() {
         return encode_number((byte) (CborSimpleType), UndefinedValue);
     }
 
     @Override
-    public CborEncoderApi cbor_encode_collection(Collection c) throws CborEncodingUnknown {
+    public CborEncoder cbor_encode_collection(Collection c) throws CborEncodingUnknown {
         cbor_start_array(c.size());
         for (Object o : c) {
             cbor_encode_object(o);
@@ -188,7 +188,7 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_map(Map m) throws CborEncodingUnknown {
+    public CborEncoder cbor_encode_map(Map m) throws CborEncodingUnknown {
         cbor_start_map(m.size());
         for (Object o : m.keySet()) {
             cbor_encode_object(o);
@@ -199,12 +199,12 @@ public class CborEncoder implements CborEncoderApi {
 
 
     @Override
-    public CborEncoderApi cbor_start_indefinite_array() {
+    public CborEncoder cbor_start_indefinite_array() {
         return cbor_start_array(-1);
     }
 
     @Override
-    public CborEncoderApi cbor_start_array(long length) {
+    public CborEncoder cbor_start_array(long length) {
         if (length < 0) {
             return put((byte) CborArrayWithIndefiniteLength);
         } else {
@@ -213,12 +213,12 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_stop_array() {
+    public CborEncoder cbor_stop_array() {
         return put((byte) BreakByte);
     }
 
     @Override
-    public CborEncoderApi cbor_start_map(long length) {
+    public CborEncoder cbor_start_map(long length) {
         if (length < 0) {
             return put((byte) CborMapWithIndefiniteLength);
         } else {
@@ -227,12 +227,12 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_stop_map() {
+    public CborEncoder cbor_stop_map() {
         return put((byte) BreakByte);
     }
 
     @Override
-    public CborEncoderApi cbor_start_byte_string(long length) {
+    public CborEncoder cbor_start_byte_string(long length) {
         if (length < 0) {
             return put((byte) CborByteStringWithIndefiniteLength);
         } else {
@@ -241,17 +241,17 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_put_byte_string_chunk(byte[] chunk) {
+    public CborEncoder cbor_put_byte_string_chunk(byte[] chunk) {
         return cbor_encode_byte_string(chunk);
     }
 
     @Override
-    public CborEncoderApi cbor_stop_byte_string() {
+    public CborEncoder cbor_stop_byte_string() {
         return put((byte) BreakByte);
     }
 
     @Override
-    public CborEncoderApi cbor_start_text_string(long length) {
+    public CborEncoder cbor_start_text_string(long length) {
         if (length < 0) {
             return put((byte) CborTextStringWithIndefiniteLength);
         } else {
@@ -260,27 +260,27 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_put_text_string_chunk(String chunk) {
+    public CborEncoder cbor_put_text_string_chunk(String chunk) {
         return cbor_encode_text_string(chunk);
     }
 
     @Override
-    public CborEncoderApi cbor_stop_text_string() {
+    public CborEncoder cbor_stop_text_string() {
         return put((byte) BreakByte);
     }
 
     @Override
-    public CborEncoderApi cbor_encode_byte_string(byte[] array) {
+    public CborEncoder cbor_encode_byte_string(byte[] array) {
         return encode_string((byte) CborByteStringType, array);
     }
 
     @Override
-    public CborEncoderApi cbor_encode_byte_string(ByteBuffer buf) {
+    public CborEncoder cbor_encode_byte_string(ByteBuffer buf) {
         return encode_string((byte) CborByteStringType, buf);
     }
 
     @Override
-    public CborEncoderApi cbor_encode_byte_string(Flowable<ByteBuffer> source, boolean computeSize) {
+    public CborEncoder cbor_encode_byte_string(Flowable<ByteBuffer> source, boolean computeSize) {
         if (computeSize) {
             long size = source.map(ByteBuffer::remaining).reduce(
                     (t, s) -> t + s).toSingle().blockingGet();
@@ -293,12 +293,12 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_byte_string(Flowable<ByteBuffer> source) {
+    public CborEncoder cbor_encode_byte_string(Flowable<ByteBuffer> source) {
         return cbor_encode_byte_string(-1, source);
     }
 
     @Override
-    public CborEncoderApi cbor_encode_byte_string(long size, Flowable<ByteBuffer> source) {
+    public CborEncoder cbor_encode_byte_string(long size, Flowable<ByteBuffer> source) {
         if (size < 0) {
             cbor_start_byte_string(-1);
             add(source.concatMap(buffer -> CBOR.encoder().cbor_encode_byte_string(buffer).observe(), 1));
@@ -311,17 +311,17 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_text_string(String str) {
+    public CborEncoder cbor_encode_text_string(String str) {
         return encode_string((byte) CborTextStringType, str.getBytes());
     }
 
     @Override
-    public CborEncoderApi cbor_encode_tag(long tag) {
+    public CborEncoder cbor_encode_tag(long tag) {
         return encode_number((byte) CborTagType, tag);
     }
 
     @Override
-    public CborEncoderApi cbor_encode_double(double value) {
+    public CborEncoder cbor_encode_double(double value) {
         add(Flowable.create(s -> {
             ByteBuffer out = ByteBuffer.allocate(9);
             out.put((byte) CborDoublePrecisionFloat);
@@ -334,7 +334,7 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_float(float value) {
+    public CborEncoder cbor_encode_float(float value) {
         add(Flowable.create(s -> {
             ByteBuffer out = ByteBuffer.allocate(5);
             out.put((byte) CborSinglePrecisionFloat);
@@ -347,7 +347,7 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_half_float(float value) {
+    public CborEncoder cbor_encode_half_float(float value) {
         add(Flowable.create(s -> {
             ByteBuffer out = ByteBuffer.allocate(3);
             out.put((byte) CborHalfPrecisionFloat);
@@ -360,7 +360,7 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_simple_value(byte value) {
+    public CborEncoder cbor_encode_simple_value(byte value) {
         if ((value & 0xff) <= Break) {
             return encode_number((byte) (SimpleTypesType << MajorTypeShift), value);
         } else {
@@ -369,7 +369,7 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_int(long value) {
+    public CborEncoder cbor_encode_int(long value) {
         long ui = value >> 63;
         byte majorType = (byte) (ui & 0x20);
         ui ^= value;
@@ -377,17 +377,17 @@ public class CborEncoder implements CborEncoderApi {
     }
 
     @Override
-    public CborEncoderApi cbor_encode_uint(long ui) {
+    public CborEncoder cbor_encode_uint(long ui) {
         return encode_number((byte) (UnsignedIntegerType << MajorTypeShift), ui);
     }
 
     @Override
-    public CborEncoderApi cbor_encode_negative_uint(long absolute_value) {
+    public CborEncoder cbor_encode_negative_uint(long absolute_value) {
         return encode_number((byte) (NegativeIntegerType << MajorTypeShift), absolute_value - 1);
 
     }
 
-    private CborEncoderApi encode_string(byte shifted_mt, byte[] array) {
+    private CborEncoder encode_string(byte shifted_mt, byte[] array) {
         int len = (array == null) ? 0 : array.length;
         if (array == null) {
             return encode_number(shifted_mt, len);
@@ -401,7 +401,7 @@ public class CborEncoder implements CborEncoderApi {
         }
     }
 
-    private CborEncoderApi encode_string(byte shifted_mt, ByteBuffer buf) {
+    private CborEncoder encode_string(byte shifted_mt, ByteBuffer buf) {
         int len = (buf == null) ? 0 : buf.remaining();
         if (buf == null) {
             return encode_number(shifted_mt, len);
@@ -416,7 +416,7 @@ public class CborEncoder implements CborEncoderApi {
         }
     }
 
-    private CborEncoderApi put(byte b) {
+    private CborEncoder put(byte b) {
         add(Flowable.create(s -> {
             ByteBuffer out = ByteBuffer.allocate(1);
             out.put(b);
@@ -427,7 +427,7 @@ public class CborEncoder implements CborEncoderApi {
         return this;
     }
 
-    private CborEncoderApi put(byte b1, byte b2) {
+    private CborEncoder put(byte b1, byte b2) {
         add(Flowable.create(s -> {
             ByteBuffer out = ByteBuffer.allocate(2);
             out.put(b1);
@@ -439,7 +439,7 @@ public class CborEncoder implements CborEncoderApi {
         return this;
     }
 
-    private CborEncoderApi encode_number(final byte shifted_mt, final long ui) {
+    private CborEncoder encode_number(final byte shifted_mt, final long ui) {
         add(Flowable.create(s -> {
             ByteBuffer out;
             if (ui < Value8Bit) {

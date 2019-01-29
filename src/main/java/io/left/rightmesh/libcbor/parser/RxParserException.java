@@ -1,4 +1,4 @@
-package io.left.rightmesh.libcbor.parser.states.basic;
+package io.left.rightmesh.libcbor.parser;
 
 /**
  * Exception thrown during deserialization.

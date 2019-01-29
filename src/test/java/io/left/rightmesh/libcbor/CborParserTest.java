@@ -15,11 +15,11 @@ import io.left.rightmesh.libcbor.parser.items.DataItem;
 import io.left.rightmesh.libcbor.parser.items.IntegerItem;
 import io.left.rightmesh.libcbor.parser.items.ParseableItem;
 import io.left.rightmesh.libcbor.parser.items.TextStringItem;
-import io.left.rightmesh.libcbor.parser.states.basic.RxParserException;
+import io.left.rightmesh.libcbor.parser.RxParserException;
 import io.reactivex.Flowable;
 
-import static io.left.rightmesh.libcbor.CborParserApi.ExpectedType.Array;
-import static io.left.rightmesh.libcbor.CborParserApi.ExpectedType.Map;
+import static io.left.rightmesh.libcbor.CborParser.ExpectedType.Array;
+import static io.left.rightmesh.libcbor.CborParser.ExpectedType.Map;
 import static io.left.rightmesh.libcbor.Constants.CborType.CborSimpleType;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,10 +32,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_PositiveInteger() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor positive integer");
+        System.out.println("[+] CborParser: testing parsing of cbor positive integer");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_int((__, ___, obj) -> assertEquals(0, (long) obj))
@@ -85,10 +85,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_NegativeInteger() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor negative integer");
+        System.out.println("[+] CborParser: testing parsing of cbor negative integer");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_int((__, ___, obj) -> assertEquals(-1, (long) obj))
@@ -114,10 +114,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_HalfFloats() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor half floating point precision number");
+        System.out.println("[+] CborParser: testing parsing of cbor half floating point precision number");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_float((__, ___, obj) -> assertEquals(0.0d, obj))
@@ -171,10 +171,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_Floats() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor single floating point precision number");
+        System.out.println("[+] CborParser: testing parsing of cbor single floating point precision number");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_float((__, ___, obj) -> assertEquals(100000.0d, obj))
@@ -205,10 +205,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_Double() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor double floating point precision number");
+        System.out.println("[+] CborParser: testing parsing of cbor double floating point precision number");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_float((__, ___, obj) -> assertEquals(1.1d, obj))
@@ -239,10 +239,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_SimpleValues() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor simple value");
+        System.out.println("[+] CborParser: testing parsing of cbor simple value");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_boolean((__, obj) -> assertEquals(false, (boolean) obj))
@@ -278,10 +278,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_Byte_Text_Strings() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor definite byte string");
+        System.out.println("[+] CborParser: testing parsing of cbor definite byte string");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             byte[] a0 = {};
@@ -331,10 +331,10 @@ public class CborParserTest {
 
     @Test
     public void encodeAppendixA_Byte_Text_Strings_Indefinite() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor indefinite byte strings");
+        System.out.println("[+] CborParser: testing parsing of cbor indefinite byte strings");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             final int o[] = new int[] {0}; // trick to modify i from lambda
@@ -364,10 +364,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_Tags() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor tags");
+        System.out.println("[+] CborParser: testing parsing of cbor tags");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_tag((__, tag) -> assertEquals(0, (long) tag))
@@ -456,10 +456,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_Array_And_Hashes_Definite() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor definite array and hashes");
+        System.out.println("[+] CborParser: testing parsing of cbor definite array and hashes");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_open_array(
@@ -514,10 +514,10 @@ public class CborParserTest {
 
     @Test
     public void parseAppendixA_GenericParsing() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor generic item");
+        System.out.println("[+] CborParser: testing parsing of cbor generic item");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_generic((__, obj) -> {
@@ -582,10 +582,10 @@ public class CborParserTest {
 
     @Test
     public void encodeAppendixA_Array_And_Hashes_Indefinite() {
-        System.out.println("[+] CborParserApi: testing parsing of cbor indefinite array and hashes");
+        System.out.println("[+] CborParser: testing parsing of cbor indefinite array and hashes");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_generic((__, i) -> {
@@ -623,10 +623,10 @@ public class CborParserTest {
 
     @Test
     public void parseAsyncBuffer() {
-        System.out.println("[+] CborParserApi: testing parsing of async cbor stream with multiple read");
+        System.out.println("[+] CborParser: testing parsing of async cbor stream with multiple read");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             b = dec.cbor_parse_generic((__, i) -> {
@@ -650,10 +650,10 @@ public class CborParserTest {
 
     @Test
     public void parseCborDisjonction() {
-        System.out.println("[+] CborParserApi: testing the cbor parser disjonction");
+        System.out.println("[+] CborParser: testing the cbor parser disjonction");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             // simple disjonction
@@ -796,10 +796,10 @@ public class CborParserTest {
 
     @Test
     public void parseCborWithFilters() {
-        System.out.println("[+] CborParserApi: testing the cbor parser filters (do_for_each)");
+        System.out.println("[+] CborParser: testing the cbor parser filters (do_for_each)");
 
         try {
-            CborParserApi dec = CBOR.parser();
+            CborParser dec = CBOR.parser();
             boolean b;
 
             // reuse previous disjonction test but and extract bytebuffer in middle
@@ -862,10 +862,10 @@ public class CborParserTest {
 
     @Test
     public void parseSeveralCustomItem() {
-        System.out.println("[+] CborParserApi: testing parse custom item");
+        System.out.println("[+] CborParser: testing parse custom item");
         LinkedList<HeaderItem> items = new LinkedList<>();
 
-        CborParserApi dec = CBOR.parser()
+        CborParser dec = CBOR.parser()
                 .cbor_parse_custom_item(HeaderItem::new, (__, ___, item) -> items.add(item));
 
         Flowable<String> f = Flowable.just(
@@ -904,7 +904,7 @@ public class CborParserTest {
         String destination;
 
         @Override
-        public CborParserApi getItemParser() {
+        public CborParser getItemParser() {
             return CBOR.parser()
                     .cbor_open_array((__, ___, i) -> {
                         //System.out.println("size="+i);
@@ -941,7 +941,7 @@ public class CborParserTest {
         String peer;
 
         @Override
-        public CborParserApi getItemParser() {
+        public CborParser getItemParser() {
             return CBOR.parser()
                     .cbor_open_array((__, ___, i) -> {
                         if (i != 1) {
