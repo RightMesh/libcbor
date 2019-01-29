@@ -101,8 +101,8 @@ public class CborEncoderImpl implements CborEncoder {
     }
 
     @Override
-    public CborEncoder merge(CborEncoderImpl o) {
-        flow = flow.concatWith(o.flow);
+    public CborEncoder merge(CborEncoder o) {
+        flow = flow.concatWith(((CborEncoderImpl)o).flow);
         return this;
     }
 

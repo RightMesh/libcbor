@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Map;
 
-import io.left.rightmesh.libcbor.encoder.CborEncoderImpl;
 import io.left.rightmesh.libcbor.encoder.CborEncodingUnknown;
 import io.reactivex.Flowable;
 
@@ -14,7 +13,7 @@ import io.reactivex.Flowable;
  */
 public interface CborEncoder {
 
-    CborEncoder merge(CborEncoderImpl o);
+    CborEncoder merge(CborEncoder o);
 
     Flowable<ByteBuffer> observe();
 

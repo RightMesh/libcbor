@@ -280,18 +280,18 @@ public class CborParserImpl implements CborParser {
     }
 
     @Override
-    public CborParser merge(CborParserImpl parser) {
+    public CborParser merge(CborParser parser) {
         if (parser != null) {
-            parserQueue.addAll(parser.parserQueue);
+            parserQueue.addAll(((CborParserImpl)parser).parserQueue);
         }
         return this;
     }
 
     @Override
-    public CborParser insert(CborParserImpl parser) {
+    public CborParser insert(CborParser parser) {
         if (parser != null) {
             Deque<ParserState> d = new ArrayDeque<>();
-            for (ParserState s : parser.parserQueue) {
+            for (ParserState s : ((CborParserImpl)parser).parserQueue) {
                 d.push(s);
             }
             for (ParserState s : d) {
@@ -337,10 +337,10 @@ public class CborParserImpl implements CborParser {
     }
 
     @Override
-    public CborParser do_insert_if(ConditionCallback ccb, CborParserImpl parser) {
+    public CborParser do_insert_if(ConditionCallback ccb, CborParser parser) {
         do_here((p) -> {
             if (ccb.condition(p)) {
-                p.insert_now(parser);
+                p.insert_now((CborParserImpl)parser);
             }
         });
         return this;
@@ -371,8 +371,8 @@ public class CborParserImpl implements CborParser {
     }
 
     @Override
-    public CborParser cbor_or(CborParserImpl p1, CborParserImpl p2) {
-        CborParserImpl[] contender = {p1, p2};
+    public CborParser cbor_or(CborParser p1, CborParser p2) {
+        CborParserImpl[] contender = {(CborParserImpl)p1, (CborParserImpl)p2};
         parserQueue.add(new CborOr(contender) {
             @Override
             public ParserState onSuccess(CborParserImpl p) {

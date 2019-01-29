@@ -3,7 +3,6 @@ package io.left.rightmesh.libcbor;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
 
-import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.callbacks.ChunkCallback;
 import io.left.rightmesh.libcbor.parser.callbacks.ConditionCallback;
 import io.left.rightmesh.libcbor.parser.callbacks.ContainerIsCloseCallback;
@@ -110,7 +109,7 @@ public interface CborParser {
      *
      * @param parser sequence to add at the end.
      */
-    CborParser merge(CborParserImpl parser);
+    CborParser merge(CborParser parser);
 
     /**
      * Add a parsing sequence after the current
@@ -118,7 +117,7 @@ public interface CborParser {
      *
      * @param parser to add at the front of the sequence
      */
-    CborParser insert(CborParserImpl parser);
+    CborParser insert(CborParser parser);
 
     CborParser do_for_each(String key, FilterCallback cb);
 
@@ -128,15 +127,15 @@ public interface CborParser {
 
     CborParser do_here(ParsingDoneCallback cb);
 
-    CborParser do_insert_if(ConditionCallback ccb, CborParserImpl parser);
+    CborParser do_insert_if(ConditionCallback ccb, CborParser parser);
 
     CborParser cbor_parse_generic(ParsedItemCallback<DataItem> cb);
 
-    CborParser cbor_parse_generic(EnumSet<CborParserImpl.ExpectedType> types, ParsedItemCallback<DataItem> cb);
+    CborParser cbor_parse_generic(EnumSet<CborParser.ExpectedType> types, ParsedItemCallback<DataItem> cb);
 
-    CborParser cbor_or(CborParserImpl p1, CborParserImpl p2);
+    CborParser cbor_or(CborParser p1, CborParser p2);
 
-    <T extends ParseableItem> CborParserImpl cbor_parse_custom_item(ItemFactory<T> factory, ParsedItemWithTagsCallback<T> cb);
+    <T extends ParseableItem> CborParser cbor_parse_custom_item(ItemFactory<T> factory, ParsedItemWithTagsCallback<T> cb);
 
     CborParser cbor_parse_boolean(ParsedBoolean cb);
 
@@ -154,9 +153,9 @@ public interface CborParser {
 
     CborParser cbor_parse_simple_value(ParsedItemCallback cb);
 
-    CborParserImpl cbor_parse_int(ParsedIntWithTagsCallback cb);
+    CborParser cbor_parse_int(ParsedIntWithTagsCallback cb);
 
-    CborParserImpl cbor_parse_float(ParsedFloatWithTagsCallback cb);
+    CborParser cbor_parse_float(ParsedFloatWithTagsCallback cb);
 
     CborParser cbor_parse_byte_string(ChunkCallback<ByteBuffer> cb);
 
@@ -180,7 +179,7 @@ public interface CborParser {
 
     CborParser cbor_parse_text_string_full(ContainerIsOpenCallback cb1, ParsedItemCallback<String> cb2);
 
-    CborParserImpl cbor_parse_text_string_unsafe(ParsedItemWithTagsCallback<String> cb);
+    CborParser cbor_parse_text_string_unsafe(ParsedItemWithTagsCallback<String> cb);
 
     CborParser cbor_parse_tag(ParsedItemCallback<Long> cb);
 
