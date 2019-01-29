@@ -8,12 +8,12 @@ import io.left.rightmesh.libcbor.parser.CborParser;
  */
 public class CBOR {
 
-    public static CborEncoderApi encoder() {
+    public static CborEncoder encoder() {
         return new CborEncoder();
     }
 
-    public static CborParserApi parser() {
-        return CborParser.create();
+    public static CborParser parser() {
+        return new CborParser();
     }
 
 }

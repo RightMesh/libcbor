@@ -138,11 +138,7 @@ public class CborParser implements CborParserApi {
         }
     }
 
-    public static CborParserApi create() {
-        return new CborParser();
-    }
-
-    private CborParser() {
+    public CborParser() {
         thisInCallback = new ParserInCallback();
     }
 
