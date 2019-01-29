@@ -75,7 +75,7 @@ public class CborParserImpl implements CborParser {
         }
 
         @Override
-        public ParserInCallback insert_now(CborParserImpl parser) {
+        public ParserInCallback insert_now(CborParser parser) {
             if (parser != null) {
                 insert(parser);
             }

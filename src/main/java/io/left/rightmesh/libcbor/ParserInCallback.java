@@ -1,6 +1,5 @@
 package io.left.rightmesh.libcbor;
 
-import io.left.rightmesh.libcbor.parser.CborParserImpl;
 import io.left.rightmesh.libcbor.parser.callbacks.FilterCallback;
 
 /**
@@ -13,7 +12,7 @@ public interface ParserInCallback {
      *
      * @param key the key for this filter
      * @param cb  te filter
-     * @return this ParserInCallbackImpl object
+     * @return this ParserInCallback object
      */
     ParserInCallback do_for_each_now(String key, FilterCallback cb);
 
@@ -32,7 +31,7 @@ public interface ParserInCallback {
      * @param parser to add at the front of the sequence
      * @return this parser
      */
-    ParserInCallback insert_now(CborParserImpl parser);
+    ParserInCallback insert_now(CborParser parser);
 
     /**
      * set an object in a map so it is accessible by any other callback.
@@ -67,7 +66,7 @@ public interface ParserInCallback {
      *
      * @param pos    position of the object
      * @param object to be saved
-     * @return ParserInCallbackImpl
+     * @return ParserInCallback
      */
     ParserInCallback setReg(int pos, Object object);
 
